@@ -44,7 +44,9 @@ int Lspeedd = 0; // left distance
 int direction = 0; // = 8 = 2 Left = Right = 6
 
 Servo myservo; // set myservo
+const int servopin = 9;
 int delay_time = 250; // servo motor steering stability time
+
 const int Fgo = 8; // forward
 const int Rgo = 6; // turn right
 const int Lgo = 4; // turn left
@@ -63,68 +65,69 @@ void setup()
   pinMode(SensorLeft, INPUT); // define left sensor mode
   pinMode(SensorMiddle, INPUT); // define middle sensor mode
   pinMode(SensorRight, INPUT); // define right sensor mode
-  digitalWrite(2, HIGH);
+  digitalWrite(2, HIGH); // wtf?
   pinMode(inputPin, INPUT); // definition ultrasound input pin
   pinMode(outputPin, OUTPUT); // definition ultrasound output pin
-  myservo.attach(9); // define the servo motor output 5th pin (PWM)
+  myservo.attach(servopin); // define the servo motor output 5th pin (PWM)
+  stop(0); // stop motors
 }
 
-void advance(int a) // forward
+void advance(int dtime) // forward
 {
   digitalWrite(MotorRight1, LOW);
   digitalWrite(MotorRight2, HIGH);
   digitalWrite(MotorLeft1, LOW);
   digitalWrite(MotorLeft2, HIGH);
-  delay(a * 100);
+  delay(dtime * 100);
 }
 
-void right(int b) // turn right (single wheel)
+void right(int dtime) // turn right (single wheel)
 {
   digitalWrite(MotorLeft1, LOW);
   digitalWrite(MotorLeft2, HIGH);
   digitalWrite(MotorRight1, LOW);
   digitalWrite(MotorRight2, LOW);
-  delay(b * 100);
+  delay(dtime * 100);
 }
-void left(int c) // turn left (single wheel)
+void left(int dtime) // turn left (single wheel)
 {
   digitalWrite(MotorRight1, LOW);
   digitalWrite(MotorRight2, HIGH);
   digitalWrite(MotorLeft1, LOW);
   digitalWrite(MotorLeft2, LOW);
-  delay(c * 100);
+  delay(dtime * 100);
 }
-void turnR(int d) // turn right (two-wheeled)
+void turnR(int dtime) // turn right (two-wheeled)
 {
   digitalWrite(MotorRight1, HIGH);
   digitalWrite(MotorRight2, LOW);
   digitalWrite(MotorLeft1, LOW);
   digitalWrite(MotorLeft2, HIGH);
-  delay(d * 100);
+  delay(dtime * 100);
 }
-void turnL(int e) // turn left (two-wheeled)
+void turnL(int dtime) // turn left (two-wheeled)
 {
   digitalWrite(MotorRight1, LOW);
   digitalWrite(MotorRight2, HIGH);
   digitalWrite(MotorLeft1, HIGH);
   digitalWrite(MotorLeft2, LOW);
-  delay(e * 100);
+  delay(dtime * 100);
 }
-void stop(int f) // stop
+void stop(int dtime) // stop
 {
   digitalWrite(MotorRight1, LOW);
   digitalWrite(MotorRight2, LOW);
   digitalWrite(MotorLeft1, LOW);
   digitalWrite(MotorLeft2, LOW);
-  delay(f * 100);
+  delay(dtime * 100);
 }
-void back(int g) // Back
+void back(int dtime) // Back
 {
   digitalWrite(MotorRight1, HIGH);
   digitalWrite(MotorRight2, LOW);
   digitalWrite(MotorLeft1, HIGH);
   digitalWrite(MotorLeft2, LOW);;
-  delay(g * 100);
+  delay(dtime * 100);
 }
 
 
@@ -227,12 +230,12 @@ void loop()
     Serial.println(results.value, HEX);
     if(results.value == IRfront) // forward
     {
-      advance(10);// forward
+      advance(10); // forward
     }
     // ************************************************* ********************** /
     if(results.value == IRback) // Back
     {
-      back(10);// Back
+      back(10); // Back
     }
     // ************************************************* ********************** /
     if(results.value == IRturnright) // right turn
@@ -247,10 +250,7 @@ void loop()
     // ************************************************* ********************** /
     if(results.value == IRstop) // stop
     {
-      digitalWrite(MotorRight1, LOW);
-      digitalWrite(MotorRight2, LOW);
-      digitalWrite(MotorLeft1, LOW);
-      digitalWrite(MotorLeft2, LOW);
+      stop(0);
     }
     // ************************************************ black self-propelled mode the *********************** cny70 mode: LOW white:
     if(results.value == IRcny70)
@@ -344,10 +344,7 @@ void loop()
             Serial.println(results.value, HEX);
             if(results.value == IRstop)
             {
-              digitalWrite(MotorRight1, LOW);
-              digitalWrite(MotorRight2, LOW);
-              digitalWrite(MotorLeft1, LOW);
-              digitalWrite(MotorLeft2, LOW);
+              stop(0);
               break;
             }
           }
@@ -364,10 +361,7 @@ void loop()
             Serial.println(results.value, HEX);
             if(results.value == IRstop)
             {
-              digitalWrite(MotorRight1, LOW);
-              digitalWrite(MotorRight2, LOW);
-              digitalWrite(MotorLeft1, LOW);
-              digitalWrite(MotorLeft2, LOW);
+              stop(0);
               break;
             }
           }
@@ -384,10 +378,7 @@ void loop()
             Serial.println(results.value, HEX);
             if(results.value == IRstop)
             {
-              digitalWrite(MotorRight1, LOW);
-              digitalWrite(MotorRight2, LOW);
-              digitalWrite(MotorLeft1, LOW);
-              digitalWrite(MotorLeft2, LOW);
+              stop(0);
               break;
             }
           }
@@ -404,10 +395,7 @@ void loop()
             Serial.println(results.value, HEX);
             if(results.value == IRstop)
             {
-              digitalWrite(MotorRight1, LOW);
-              digitalWrite(MotorRight2, LOW);
-              digitalWrite(MotorLeft1, LOW);
-              digitalWrite(MotorLeft2, LOW);
+              stop(0);
               break;
             }
           }
@@ -423,10 +411,7 @@ void loop()
           Serial.println(results.value, HEX);
           if(results.value == IRstop)
           {
-            digitalWrite(MotorRight1, LOW);
-            digitalWrite(MotorRight2, LOW);
-            digitalWrite(MotorLeft1, LOW);
-            digitalWrite(MotorLeft2, LOW);
+            stop(0);
             break;
           }
         }
